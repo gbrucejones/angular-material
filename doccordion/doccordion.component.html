@@ -1,0 +1,68 @@
+<h1>Accordian</h1>
+
+<mat-accordion multi="true">
+
+	<!-- Doctor Bio -->
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-icon svgIcon="thumbs-up" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+			<mat-panel-title>
+				About Dr. {{doctor?.LastName}}</mat-panel-title>
+		</mat-expansion-panel-header>
+		<!-- placeholder for you content -->
+		<div class="truss-sides">
+			<blockquote class="dr-profile" *ngIf="doctor?.SharpExperience">
+				<span class="blk-quote-top">&ldquo;<span [innerHTML]="doctor?.SharpExperience"></span>&rdquo;</span>
+
+				<span class="blk-quote-bottom">&ndash; Dr. {{doctor?.FirstName}} {{doctor?.LastName}}</span>
+			</blockquote>
+		</div>
+		<h3>Biography</h3>
+		<div class="sixteen columns">
+			<p *ngIf="doctor?.Bio" [innerHTML]="doctor?.Bio"></p>
+			<div *ngIf="doctor?.Age">Age: {{doctor?.Age }}</div>
+			<div *ngIf="doctor?.YearStartedPractice">In practice since: {{doctor?.YearStartedPractice}}
+			</div>
+			<div *ngIf="doctor?.Gender">Gender: {{doctor?.Gender | gender}}</div>
+			<div *ngIf="doctor?.Languages && doctor?.Languages.length">
+				<pluralize [count]="doctor.Languages.length" [when]="{'one': 'Additional Language Spoken', 'other': 'Additional languages spoken'}">
+				</pluralize>:
+				<span *ngFor="let language of doctor?.Languages; let isLast = last;">
+					{{language.Language}}{{isLast ? '' : ', '}}
+					<a pageScroll href="#video" [pageScrollDuration]="200" *ngIf="language.video" (click)="showVideo(language)">(View {{language.Language}} Video)</a>
+				</span>
+			</div>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-icon svgIcon="thumbs-up" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+			<mat-panel-title>
+				About Dr. {{doctor?.LastName}}</mat-panel-title>
+		</mat-expansion-panel-header>
+		<!-- placeholder for you content -->
+		<div class="truss-sides">
+			<blockquote class="dr-profile" *ngIf="doctor?.SharpExperience">
+				<span class="blk-quote-top">&ldquo;<span [innerHTML]="doctor?.SharpExperience"></span>&rdquo;</span>
+
+				<span class="blk-quote-bottom">&ndash; Dr. {{doctor?.FirstName}} {{doctor?.LastName}}</span>
+			</blockquote>
+		</div>
+		<h3>Biography</h3>
+		<div class="sixteen columns">
+			<p *ngIf="doctor?.Bio" [innerHTML]="doctor?.Bio"></p>
+			<div *ngIf="doctor?.Age">Age: {{doctor?.Age }}</div>
+			<div *ngIf="doctor?.YearStartedPractice">In practice since: {{doctor?.YearStartedPractice}}
+			</div>
+			<div *ngIf="doctor?.Gender">Gender: {{doctor?.Gender | gender}}</div>
+			<div *ngIf="doctor?.Languages && doctor?.Languages.length">
+				<pluralize [count]="doctor.Languages.length" [when]="{'one': 'Additional Language Spoken', 'other': 'Additional languages spoken'}">
+				</pluralize>:
+				<span *ngFor="let language of doctor?.Languages; let isLast = last;">
+					{{language.Language}}{{isLast ? '' : ', '}}
+					<a pageScroll href="#video" [pageScrollDuration]="200" *ngIf="language.video" (click)="showVideo(language)">(View {{language.Language}} Video)</a>
+				</span>
+			</div>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

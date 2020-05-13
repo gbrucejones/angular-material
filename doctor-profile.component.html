@@ -1,0 +1,218 @@
+<div class="overlay-fad" [@overlayState]="overlayState" (click)="triggerAnimation({drawerInstance: 'closeAll'})" (click)="dDirectionsPrintEnabled = false" id='test'></div>
+
+<div [class.directions-drawer-open]="dDirectionsPrintEnabled">
+
+	<!-- Hero container containing page heading -->
+	<div class="container breadcrumbs white print-hide" id="hero-container">
+		<div class="row">
+			<div class="sixteen columns no-small no-xsmall no-medium no-medlarge">
+				<div class="container">
+					<div class="row">
+						<div class="columns sixteen">
+							<div class="truss">
+								<ul>
+									<li title="Home"><a id="breadcrumb-home" href="/">placeholder for breadcrumbs</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Main Container below the breadcrumbs -->
+	<div class="container full ivory print-hide">
+		<div class="row">
+			<div class="columns sixteen">
+				<div class="container">
+					<div class="row">
+						<!-- MAIN CONTENT SECTION -->
+						<div class="nine columns eight-small">
+							<div itemscope itemtype="http://schema.org/Physician" id="doctor-profile">
+								<!-- Dr Image / Ratings Summary / Specialties -->
+								<div class="row doctor-image-details lego">
+									<div class="sixteen columns">
+										<!--- Doctor Image -->
+										<div class="image-block">
+											<div class="truss">
+												<div class="doctor-image circled" *ngIf="doctor" [ngSwitch]="doctor.Photo" squareDimensions>
+													<img *ngSwitchCase="''" itemprop="image" src="//images.sharp.com/doctors/no_doc_image.png" alt="" class="resp-image">
+													<img *ngSwitchDefault itemprop="image" src="//images.sharp.com/doctors/{{doctor.Photo}}" alt="{{doctor?.Salutation}} {{doctor?.FirstName}} {{doctor?.LastName}}"
+														class="resp-image">
+												</div>
+												<div class="text-center has-video-link-container" *ngIf="doctor?.Video">
+													<a pageScroll href="#video" [pageScrollDuration]="200" class="has-video-link icon-ctn">
+														<i class="ss-play"></i>
+													</a>
+													<a pageScroll href="#video" [pageScrollDuration]="200" class="has-video-link">
+														<span>Watch video</span>
+													</a>
+												</div>
+											</div>
+										</div>
+
+										<!--- Name / title -->
+										<div class="description-block" style="padding-top: 15px;">
+											<h1 id="comp-dr-name" itemprop="name" class="notranslate">
+												{{doctor?.FirstName}} {{doctor?.LastName}}, {{drTitles}}</h1>
+											<!-- Not currently accepting -->
+											<ul id="key-info" class="not-currently-accepting" *ngIf="notAcceptingMessages.length">
+												<li *ngFor="let message of notAcceptingMessages">{{message}}</li>
+											</ul>
+										</div>
+
+										<!-- Patient Ratings Block -->
+										<div class="description-block" style="padding-top: 0;">
+											<div *ngIf="isRequesting">
+												<div class="loader-wrapper">
+													<spinner [isRunning]="isRequesting" [spinnerWrapper]="'loader'"></spinner>
+												</div>
+											</div>
+
+											<!-- Ratings -->
+											<div *ngIf="!isRequesting" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+												<div class="inline-star">
+													<ai-star [rating]="overallRatingValue" [ratingType]="'singleInstance'" (onTriggerAnimation)="triggerAnimation($event)" [ratingMessageTitle]="ratings?.ratingMessageTitle"
+														[ratingMessageBody]="ratings?.ratingMessageBody" (onSetPatientRatingsMessage)="passedInMessage = $event" style="display: block; margin-bottom: 10px">
+													</ai-star>
+												</div> <span *ngIf="overallRatingValue"> <a pageScroll href="#patient-ratings" [pageScrollDuration]="200" (click)="toggleDetailsAccordion('showRatings', true)"
+														id="rating-details-link">
+														<span itemprop="reviewCount"> {{ratings?.ratings.totalRatingCount}}</span>
+														ratings</a></span>
+											</div>
+										</div>
+
+										<!-- Specialty -->
+										<div *ngIf="doctor?.Specialties.length" class="description-block wrap-block">
+											<ul>
+												<li *ngFor="let specialty of doctor.Specialties" itemprop="medicalSpecialty" itemscope itemtype="http://schema.org/MedicalSpecialty">
+													<span itemprop="name">{{specialty.Specialty}}
+														<span *ngIf="specialty.isBoardCertified">(Board Certified)</span>
+													</span>
+												</li>
+											</ul>
+										</div>
+
+										<!-- Patient Portal -->
+										<div *ngIf="offersCount > 0" class="description-block wrap-block doctor-profile-offers">
+											<h6>Patient Portal</h6>
+											<div>
+												<a href="https://www.sharp.com/patient/followmyhealth/">FollowMyHealth</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- END Dr Image / Ratings Summary / Specialties -->
+
+								<!-- Maps custom component -->
+								<div class="row lego-bottom">
+									<div class="sixteen columns">
+										<app-custom-agm [inputDoctor]="obsDoctor" (dDirectionsPrintEnabled)="togglePrint($event)"></app-custom-agm>
+										<img src="https://miro.medium.com/max/1400/1*qYUvh-EtES8dtgKiBRiLsA.png" width="466" height="254">
+									</div>
+								</div>
+								<!-- Office Hours -->
+								<div class="row" *ngIf="hasOfficeHours">
+									<div class="sixteen columns">
+										<office-hours [locations]="locations" [salutation]="doctor?.Salutation" [lastName]="doctor?.LastName" (onOpenBrainDrawer)="openDrawerBrain($event)">
+										</office-hours>
+									</div>
+								</div>
+
+								<!-- COLLAPSABLE SECTIONS! COLLAPSABLE SECTIONS! COLLAPSABLE SECTIONS! COLLAPSABLE SECTIONS! -->
+								<app-doccordion [isVideoOpen]="true" [doctor]="doctor"></app-doccordion>
+							</div>
+
+
+
+
+							<!-- Back to TOP -->
+							<div class="row lego">
+								<div class="sixteen columns">
+									<div class="truss-sides">
+										<a pageScroll href="#doctor-profile" [pageScrollDuration]="200">Back to top</a>
+									</div>
+								</div>
+							</div>
+
+							<!-- Footnote / Safe harbor copy -->
+							<div class="row">
+								<div class="sixteen columns lego-bottom">
+									<div class="truss">
+										<p class="footnote">
+											All affiliated physicians referred by Sharp HealthCare are in good standing with a Sharp hospital or
+											medical group and pay
+											no fees to be included in this service. Physicians are not employees or agents of Sharp HealthCare.
+											Selection is
+											based on your particular needs.
+											<a href="/san-diego-doctors/doctor-inclusion-information.cfm">Learn more about how doctors are
+												included in this service and the information displayed here.</a>
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="five columns offset-one eight-small">
+							<div class="row lego">
+								<div class="sixteen columns">
+									<!--- Doctor Image -->
+									<div class="book-apt-block">
+										<div class="truss">
+											<h6>some sdfasdfasdfsadf</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Recently Viewed -->
+	<div class="slideup-bottom container full fad-print-hide" *ngIf="showRecentlyViewed" [@recentlyViewedState]="drawerState.recentlyViewed.state">
+		<div class="row">
+			<div class="sixteen columns">
+				<div class="container">
+					<div class="sixteen columns">
+						<div class="truss">
+							<div id="recently-viewed-profile" class="recently-viewed-tab" (click)="triggerAnimation({drawerInstance: 'recentlyViewed'})">Recently Viewed
+								<i *ngIf="drawerState.recentlyViewed.state === 'inactive'" class="ss-plus"></i>
+								<i *ngIf="drawerState.recentlyViewed.state === 'active'" class="ss-hyphen"></i>
+							</div>
+							<recently-viewed (onTriggerAnimation)="triggerAnimation($event)"></recently-viewed>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ALL DRAWERS - ALL DRAWERS - ALL DRAWERS! -->
+	<!-- Patient Status; Schedule Appointment; Call insurance; Nurse Referral Drawers-->
+	<div class="container full drawer-wrapper ivory fad-print-hide">
+		<patient-status class="four eight-small four-medium columns drawer-content slidr" [doctor]="doctor" [@patientStatusState]="drawerState.patientStatus.state"
+			(onTriggerAnimation)="triggerAnimation($event)" (onOpenDrawer)="openDrawerBrain($event)"></patient-status>
+
+		<schedule-appointment class="four eight-small four-medium columns drawer-content slidr" [doctor]="doctor" [openDrawerType]="openDrawerType"
+			[@scheduleAppointmentState]="drawerState.scheduleAppointment.state" (onTriggerAnimation)="triggerAnimation($event)" (onOpenDrawer)="openDrawerBrain($event)"></schedule-appointment>
+
+		<call-insurance class="four eight-small four-medium columns drawer-content slidr" [doctor]="doctor" [@callInsuranceState]="drawerState.callInsurance.state"
+			(onTriggerAnimation)="triggerAnimation($event)">
+		</call-insurance>
+
+		<nurse-referral [doctor]="doctor" class="four eight-small four-medium columns drawer-content slidr" [@nurseReferralState]="drawerState.nurseReferral.state"
+			(onTriggerAnimation)="triggerAnimation($event)">
+		</nurse-referral>
+	</div>
+
+	<!-- Patient Ratings Drawer-->
+	<div class="container full patient-ratings-wrapper ivory">
+		<div id="patient-ratings-drawer" class="four eight-small four-medium columns drawer-content slidr" [@patientRatingsMessageDrawerState]="drawerState.patientRatingsMessage.state">
+			<patient-ratings-message-drawer (onTriggerAnimation)="triggerAnimation($event)" [message]="passedInMessage">
+			</patient-ratings-message-drawer>
+		</div>
+	</div>
